@@ -1,0 +1,141 @@
+(define (assert a)
+  (if a
+      #t
+      (error "Not true:" a)))
+
+(define (assert-false a)
+  (if (not a)
+      #t
+      (error "Not false:" a)))
+
+(define (assert-= a b)
+  (if (= a b)
+      #t
+      (error "Not equal:" a b)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.1
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(assert-= 486 (+ 137 349))
+(assert-= 666 (- 1000 334))
+(assert-= 495 (* 5 99))
+(assert-= 2 (/ 10 5))
+(assert-= 12.7 (+ 2.7 10))
+
+(assert-= 75 (+ 21 35 12 7))
+(assert-= 1200 (* 25 4 12))
+
+(assert-= 19 (+ (* 3 5) (- 10 6)))
+
+(assert-= 57
+	  (+ (* 3
+		(+ (* 2 4)
+		   (+ 3 5)))
+	     (+ (- 10 7)
+		6)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.2
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define size 2)
+
+(assert-= 2 size)
+(assert-= 10 (* 5 size))
+; etc.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(assert-= 390
+	  (* (+ 2 (* 4 6))
+	     (+ 3 5 7)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (square x) (* x x))
+
+(assert-= 441 (square 21))
+(assert-= 49 (square (+ 2 5)))
+(assert-= 81 (square (square 3)))
+
+(define (sum-of-squares x y)
+  (+ (square x)
+     (square y)))
+
+(assert-= 25 (sum-of-squares 3 4))
+
+(define (f a)
+  (sum-of-squares (+ a 1) (* a 2)))
+
+(assert-= 136 (f 5))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.4
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (test-abs abs-function)
+  (assert-= 10 (abs-function  10))
+  (assert-=  0 (abs-function   0))
+  (assert-= 10 (abs-function -10)))
+(test-abs abs)
+
+(define (abs1 x)
+  (cond ((> x 0) x)
+	((= x 0) 0)
+	((< x 0) (- x))))
+(test-abs abs1)
+
+(define (abs2 x)
+  (cond ((< x 0) (- x))
+	(else x)))
+(test-abs abs2)
+
+(define (abs3 x)
+  (if (< x 0) 
+      (- x)
+      x))
+(test-abs abs3)
+
+(define (test-ge ge-function)
+  (assert       (ge-function 4 3))
+  (assert       (ge-function 4 4))
+  (assert-false (ge-function 3 4)))
+(test-ge >=)
+
+(define (ge1 x y)
+  (or (> x y)
+      (= x y)))
+(test-ge ge1)
+
+(define (ge2 x y)
+  (not (< x y)))
+(test-ge ge2)
+
+; Exercise 1.1
+
+(assert-= 10 10)
+(assert-= 12 (+ 5 3 4))
+(assert-= 8 (- 9 1))
+(assert-= 3 (/ 6 2))
+(assert-= 6 (+ (* 2 4) (- 4 6)))
+(define a 3)
+(define b (+ a 1))
+(assert-= 19 (+ a b (* a b)))
+(assert-false (= a b))
+(assert-= 4 (if (and (> b a) (< b (* a b)))
+		b
+		a
+		))
+(assert-= 16 (cond ((= a 4) 6)
+		   ((= b 4) (+ 6 7 a))
+		   (else 25)))
+(assert-= 6 (+ 2 (if (> b a) b a)))
+(assert-= 16 (* (cond ((> a b) a)
+		      ((< a b) b)
+		      (else -1))
+		(+ a 1)))
