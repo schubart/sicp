@@ -188,6 +188,12 @@
 ; 1.1.7
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (test-sqrt)
+  (assert-= 3.00009155413138   (sqrt 9))
+  (assert-= 11.704699917758145 (sqrt (+ 100 37)))
+  (assert-= 1.7739279023207892 (sqrt (+ (sqrt 2) (sqrt 3))))
+  (assert-= 1000.000369924366  (square (sqrt 1000))))
+
 (define (sqrt-iter guess x)
   (if (good-enough? guess x)
       guess
@@ -202,10 +208,7 @@
   (< (abs (- (square guess) x)) 0.001))
 (define (sqrt x)
   (sqrt-iter 1.0 x))
-(assert-= 3.00009155413138   (sqrt 9))
-(assert-= 11.704699917758145 (sqrt (+ 100 37)))
-(assert-= 1.7739279023207892 (sqrt (+ (sqrt 2) (sqrt 3))))
-(assert-= 1000.000369924366  (square (sqrt 1000)))
+(test-sqrt)
 
 ; Exercise 1.6
 
@@ -225,3 +228,35 @@
 			 x)))
 ; (new-sqrt-iter 1.0 2) ; Commented out because it causes stack overflow
 
+; Exercise 1.7
+
+; TODO
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.8
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Note: "average" still defined outside.
+(define (sqrt x)
+  (define (good-enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess x)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess x)
+    (if (good-enough? guess x)
+	guess
+	(sqrt-iter (improve guess x) x)))
+  (sqrt-iter 1.0 x))
+(test-sqrt)
+
+(define (sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+	guess
+	(sqrt-iter (improve guess))))
+  (sqrt-iter 1.0))
+(test-sqrt)
