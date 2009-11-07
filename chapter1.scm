@@ -302,7 +302,7 @@
 (assert-= 9 (inc 8))
 (assert-= 9 9)
 
-; plus1 generates an iterative process:
+; plus2 generates an iterative process:
 (define (plus2 a b)
   (if (= a 0)
       b
@@ -314,3 +314,63 @@
 (assert-= 9 (plus2 1 8))
 (assert-= 9 (plus2 0 9))
 (assert-= 9 9)
+
+; Exercise 1.10
+
+; This definition of the Ackermann function is strange. See
+; http://eli.thegreenplace.net/2007/06/26/sicp-section-121/#fn3
+; http://list.cs.brown.edu/pipermail/plt-scheme/2007-September/020754.html
+(define (A x y)
+  (cond ((= y 0) 0)
+	((= x 0) (* 2 y))
+	((= y 1) 2)
+	(else (A (- x 1)
+		 (A x (- y 1))))))
+
+(assert-= 10 (A 0 5))
+(assert-= 10 10)
+; -> (A 0 n) computes 2*n:
+(define (f n) (A 0 n))
+(assert-= 0 (f 0))
+(assert-= 2 (f 1))
+(assert-= 4 (f 2))
+(assert-= 6 (f 3))
+
+(assert-= 1024 (A 1 10))
+(assert-= 1024 (A 0 (A 1 9)))
+(assert-= 1024 (A 0 (A 0 (A 1 8))))
+; ...
+(assert-= 1024 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 1)))))))))))
+(assert-= 1024 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 2))))))))))
+(assert-= 1024 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 (A 0 4)))))))))
+; ...
+(assert-= 1024 (A 0 512))
+(assert-= 1024 1024)
+; -> (A 1 n) computes 2^n:
+(define (g n) (A 1 n))
+(assert-= 0    (g 0))
+(assert-= 2    (g 1))
+(assert-= 4    (g 2))
+(assert-= 8    (g 3))
+(assert-= 1024 (g 10))
+
+(assert-= 65536 (A 2 4))
+(assert-= 65536 (A 1 (A 2 3)))
+(assert-= 65536 (A 1 (A 1 (A 1 2))))
+(assert-= 65536 (A 1 (A 1 4)))
+(assert-= 65536 (A 1 16)))
+(assert-= 65536 65536))
+; -> (A 2 n) computes 2^(2^(...)):
+(define (h n) (A 2 n))
+(assert-= 0     (h 0))
+(assert-= 2     (h 1))
+(assert-= 4     (h 2))
+(assert-= 16    (h 3))
+(assert-= 65536 (h 4))
+
+(assert-= 65536 (A 3 3))
+(assert-= 65536 (A 2 (A 3 2)))
+(assert-= 65536 (A 2 (A 2 (A 3 1))))
+(assert-= 65536 (A 2 (A 2 2)))
+(assert-= 65536 (A 2 4))
+(assert-= 65536 65536)
