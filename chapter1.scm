@@ -170,7 +170,7 @@
 ; Exercise 1.5
 
 ; With applicative-order evaluation, "(p)" will be evaluated first before
-; applying (test ...). Since p never terminates, the evaluation never 
+; applying (test ...). Since p never terminates, the evaluation never
 ; terminates.
 ;
 ; With normal-order-evaluation, (test ...) is applied first. Since x is 0,
@@ -209,7 +209,7 @@
 
 ; Exercise 1.6
 
-; new-if always evaluates its three arguments first, even if good-enough? 
+; new-if always evaluates its three arguments first, even if good-enough?
 ; returns true. Therefore, the recursion does not terminate.
 
 (define (new-if predicate then-clause else-clause)
