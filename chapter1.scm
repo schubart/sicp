@@ -260,3 +260,57 @@
 	(sqrt-iter (improve guess))))
   (sqrt-iter 1.0))
 (test-sqrt)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.2.1
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+(assert-= 720 (factorial 6))
+
+(define (factorial n)
+  (define (iter product counter)
+    (if (> counter n)
+	product
+	(iter (* counter product)
+	      (+ counter 1))))
+  (iter 1 1))
+(assert-= 720 (factorial 6))
+
+; Exercise 1.9
+
+(define (inc n) (+ n 1))
+(define (dec n) (- n 1))
+
+; plus1 generates a recursive process:
+(define (plus1 a b)
+  (if (= a 0)
+      b
+      (inc (plus1 (dec a) b))))
+
+(assert-= 9 (plus1 4 5))
+(assert-= 9 (inc (plus1 3 5)))
+(assert-= 9 (inc (inc (plus1 2 5))))
+(assert-= 9 (inc (inc (inc (plus1 1 5)))))
+(assert-= 9 (inc (inc (inc (inc (plus1 0 5))))))
+(assert-= 9 (inc (inc (inc (inc 5)))))
+(assert-= 9 (inc (inc (inc 6))))
+(assert-= 9 (inc (inc 7)))
+(assert-= 9 (inc 8))
+(assert-= 9 9)
+
+; plus1 generates an iterative process:
+(define (plus2 a b)
+  (if (= a 0)
+      b
+      (plus2 (dec a) (inc b))))
+
+(assert-= 9 (plus2 4 5))
+(assert-= 9 (plus2 3 6))
+(assert-= 9 (plus2 2 7))
+(assert-= 9 (plus2 1 8))
+(assert-= 9 (plus2 0 9))
+(assert-= 9 9)
