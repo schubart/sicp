@@ -162,9 +162,8 @@
 
 ; a and b get combined by "+" if b is positive, by "-" otherwise. This
 ; effectively adds (abs b) to a.
-
 (define (a-plus-abs-b a b)
-  ((if (> b 0) + -) a b)
+  ((if (> b 0) + -) a b))
 (assert-= 10 (a-plus-abs-b 7  3))
 (assert-= 10 (a-plus-abs-b 7 -3))
 
@@ -183,5 +182,47 @@
   (if (= x 0)
       0
       y))
-;; (test 0 (p)) ;; Not running this because it hangs the interpreter.
+(+ 1 4)
+; (test 0 (p)) ;; Not running this because it hangs the interpreter.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.1.7
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+		 x)))
+(define (improve guess x)
+  (average guess (/ x guess)))
+(define (average x y)
+  (/ (+ x y)
+     2))
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+(assert-= 3.00009155413138   (sqrt 9))
+(assert-= 11.704699917758145 (sqrt (+ 100 37)))
+(assert-= 1.7739279023207892 (sqrt (+ (sqrt 2) (sqrt 3))))
+(assert-= 1000.000369924366  (square (sqrt 1000)))
+
+; Exercise 1.6
+
+; new-if always evaluates its three arguments first, even if good-enough? 
+; returns true. Therefore, the recursion does not terminate.
+
+(define (new-if predicate then-clause else-clause)
+  (cond (predicate then-clause)
+	(else      else-clause)))
+(assert-= 5 (new-if (= 2 3) 0 5))
+(assert-= 0 (new-if (= 1 1) 0 5))
+
+(define (new-sqrt-iter guess x)
+  (new-if (good-enough? guess x)
+	  guess
+	  (new-sqrt-iter (improve guess x)
+			 x)))
+; (new-sqrt-iter 1.0 2) ; Commented out because it causes stack overflow
 
