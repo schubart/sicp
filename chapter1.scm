@@ -29,11 +29,11 @@
 (assert-= 19 (+ (* 3 5) (- 10 6)))
 
 (assert-= 57
-	  (+ (* 3
-		(+ (* 2 4)
-		   (+ 3 5)))
-	     (+ (- 10 7)
-		6)))
+          (+ (* 3
+                (+ (* 2 4)
+                   (+ 3 5)))
+             (+ (- 10 7)
+                6)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 1.1.2
@@ -50,8 +50,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (assert-= 390
-	  (* (+ 2 (* 4 6))
-	     (+ 3 5 7)))
+          (* (+ 2 (* 4 6))
+             (+ 3 5 7)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 1.1.3
@@ -86,17 +86,17 @@
 
 (define (abs1 x)
   (cond ((> x 0) x)
-	((= x 0) 0)
-	((< x 0) (- x))))
+        ((= x 0) 0)
+        ((< x 0) (- x))))
 (test-abs abs1)
 
 (define (abs2 x)
   (cond ((< x 0) (- x))
-	(else x)))
+        (else x)))
 (test-abs abs2)
 
 (define (abs3 x)
-  (if (< x 0) 
+  (if (< x 0)
       (- x)
       x))
 (test-abs abs3)
@@ -128,14 +128,59 @@
 (assert-= 19 (+ a b (* a b)))
 (assert-false (= a b))
 (assert-= 4 (if (and (> b a) (< b (* a b)))
-		b
-		a
-		))
+                b
+                a
+                ))
 (assert-= 16 (cond ((= a 4) 6)
-		   ((= b 4) (+ 6 7 a))
-		   (else 25)))
+                   ((= b 4) (+ 6 7 a))
+                   (else 25)))
 (assert-= 6 (+ 2 (if (> b a) b a)))
 (assert-= 16 (* (cond ((> a b) a)
-		      ((< a b) b)
-		      (else -1))
-		(+ a 1)))
+                      ((< a b) b)
+                      (else -1))
+                (+ a 1)))
+
+(assert-= (/ -37 150)
+          (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
+             (* 3 (- 6 2) (- 2 7))))
+
+; Exercise 1.2
+
+(define (sum-of-squares-of-two-largest x y z)
+  (cond ((and (<= x y) (<= x z)) (sum-of-squares y z))
+        ((<= y z)                (sum-of-squares x z))
+        (else                    (sum-of-squares x y))))
+
+(assert-= 25 (sum-of-squares-of-two-largest 2 3 4))
+(assert-= 25 (sum-of-squares-of-two-largest 3 2 4))
+(assert-= 25 (sum-of-squares-of-two-largest 2 4 3))
+(assert-= 25 (sum-of-squares-of-two-largest 3 4 2))
+(assert-= 25 (sum-of-squares-of-two-largest 4 2 3))
+(assert-= 25 (sum-of-squares-of-two-largest 4 3 2))
+
+; Exercise 1.4
+
+; a and b get combined by "+" if b is positive, by "-" otherwise. This
+; effectively adds (abs b) to a.
+
+(define (a-plus-abs-b a b)
+  ((if (> b 0) + -) a b)
+(assert-= 10 (a-plus-abs-b 7  3))
+(assert-= 10 (a-plus-abs-b 7 -3))
+
+; Exercise 1.5
+
+; With applicative-order evaluation, "(p)" will be evaluated first before
+; applying (test ...). Since p never terminates, the evaluation never 
+; terminates.
+;
+; With normal-order-evaluation, (test ...) is applied first. Since x is 0,
+; and (if) short-circuits, y is never evaluated. The expression terminates and
+; returns 0.
+
+(define (p) (p))
+(define (test x y)
+  (if (= x 0)
+      0
+      y))
+;; (test 0 (p)) ;; Not running this because it hangs the interpreter.
