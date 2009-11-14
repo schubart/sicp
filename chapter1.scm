@@ -358,8 +358,8 @@
 (assert-= 65536 (A 1 (A 2 3)))
 (assert-= 65536 (A 1 (A 1 (A 1 2))))
 (assert-= 65536 (A 1 (A 1 4)))
-(assert-= 65536 (A 1 16)))
-(assert-= 65536 65536))
+(assert-= 65536 (A 1 16))
+(assert-= 65536 65536)
 ; -> (A 2 n) computes 2^(2^(...)):
 (define (h n) (A 2 n))
 (assert-= 0     (h 0))
@@ -374,3 +374,60 @@
 (assert-= 65536 (A 2 (A 2 2)))
 (assert-= 65536 (A 2 4))
 (assert-= 65536 65536)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.2.2
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (test-fib fib-fn) 
+  (assert-= 0  (fib-fn 0))
+  (assert-= 1  (fib-fn 1))
+  (assert-= 1  (fib-fn 2))
+  (assert-= 2  (fib-fn 3))
+  (assert-= 3  (fib-fn 4))
+  (assert-= 5  (fib-fn 5))
+  (assert-= 8  (fib-fn 6))
+  (assert-= 13 (fib-fn 7)))
+
+(define (fib n)
+  (cond ((= n 0) 0)
+	((= n 1) 1)
+	(else (+ (fib (- n 1))
+		 (fib (- n 2))))))
+(test-fib fib)
+
+(define (fib2 n)
+  (define (iter a b count)
+    (if (= count 0)
+	b
+	(iter (+ a b) a (- count 1))))
+  (iter 1 0 n))
+(test-fib fib2)
+
+(define (count-change amount coins)
+  (cond ((= amount 0)  1)
+	((null? coins) 0)
+	((< amount 0)  0)
+	(else (+ (count-change amount (cdr coins))
+		 (count-change (- amount (car coins)) coins)))))
+(assert-= 292 (count-change 100 '(1 5 10 25 50)))
+
+; 5 + 5
+; 5 + 1 + ... + 1
+; 1 + ... + 1
+(define cc count-change) ; Shorter name.
+(assert-= 3 (cc 10 '(5 1)))
+(assert-= 3 (+ (cc 10 '(1)) (cc 5 '(5 1))))
+(assert-= 3 (+ (+ (cc 10 '()) (cc 9 '(1))) (cc 5 '(5 1))))
+(assert-= 3 (+ (+ 0 (cc 9 '(1))) (cc 5 '(5 1))))
+(assert-= 3 (+ (+ 0 (+ (cc 9 '()) (cc 8 '(1)))) (cc 5 '(5 1))))
+(assert-= 3 (+ (+ 0 (+ 0 (cc 8 '(1)))) (cc 5 '(5 1))))
+; ... Not keeping tack of number 0 terms here...
+(assert-= 3 (+ (+ 0 (+ 0 (cc 0 '(1)))) (cc 5 '(5 1))))
+(assert-= 3 (+ (+ 0 (+ 0 1)) (cc 5 '(5 1))))
+(assert-= 3 (+ 1 (cc 5 '(5 1))))
+; ...
+(assert-= 3 (+ 1 (+ 1 (cc 0 '(5 1)))))
+(assert-= 3 (+ 1 (+ 1 1)))
+
+; TODO Challenge: More efficient count-change
