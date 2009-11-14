@@ -458,3 +458,32 @@
 	(iter (+ a b b c c c) a b (- count 1))))
   (iter 2 1 0 n))
 (check-f f-iter)
+
+; Exercise 1.12
+
+(define (pascal row column)
+  (cond ((= column 0)   1) ; Left-most column.
+	((= column row) 1) ; Right-most column.
+	(else (+ (pascal (- row 1) (- column 1))
+		 (pascal (- row 1) column)))))
+
+(assert-= 1 (pascal 0 0))
+
+(assert-= 1 (pascal 1 0))
+(assert-= 1 (pascal 1 1))
+
+(assert-= 1 (pascal 2 0))
+(assert-= 2 (pascal 2 1))
+(assert-= 1 (pascal 2 2))
+
+(assert-= 1 (pascal 3 0))
+(assert-= 3 (pascal 3 1))
+(assert-= 3 (pascal 3 2))
+(assert-= 1 (pascal 3 3))
+
+(assert-= 1 (pascal 4 0))
+(assert-= 4 (pascal 4 1))
+(assert-= 6 (pascal 4 2))
+(assert-= 4 (pascal 4 3))
+(assert-= 1 (pascal 4 4))
+
