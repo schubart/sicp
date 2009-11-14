@@ -583,6 +583,8 @@
 	(else (+ a (fast-mul a (- b 1))))))
 (check-mul fast-mul)
 
+; Exercise 1.18.
+
 (define (fast-mul-iter a b)
   (define (iter a b result)
     (cond ((= b 0)   result)
