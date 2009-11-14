@@ -540,3 +540,54 @@
 	  (else      (iter b (- n 1) (* a b)))))
   (iter b n 1))
 (check-expt fast-expt-iter)
+
+; Exercise 1.17.
+
+(define (check-mul mul-fn)
+  (assert-=  0 (mul-fn 0 0))
+  (assert-=  0 (mul-fn 0 1))
+  (assert-=  0 (mul-fn 0 2))
+  (assert-=  0 (mul-fn 0 5))
+
+  (assert-=  0 (mul-fn 1 0))
+  (assert-=  1 (mul-fn 1 1))
+  (assert-=  2 (mul-fn 1 2))
+  (assert-=  5 (mul-fn 1 5))
+
+  (assert-=  0 (mul-fn 2 0))
+  (assert-=  2 (mul-fn 2 1))
+  (assert-=  4 (mul-fn 2 2))
+  (assert-= 10 (mul-fn 2 5))
+
+  (assert-=  0 (mul-fn 5 0))
+  (assert-=  5 (mul-fn 5 1))
+  (assert-= 10 (mul-fn 5 2))
+  (assert-= 25 (mul-fn 5 5)))
+(check-mul *)
+
+(define (mul a b)
+  (if (= b 0)
+      0
+      (+ a (mul a (- b 1)))))
+(check-mul mul)
+
+(define (double n)
+  (* n 2))
+(define (half n)
+  (if (even? n)
+      (/ n 2)
+      (error "Not even: " n)))
+(define (fast-mul a b)
+  (cond ((= b 0) 0)
+	((even? b) (double (fast-mul a (half b))))
+	(else (+ a (fast-mul a (- b 1))))))
+(check-mul fast-mul)
+
+(define (fast-mul-iter a b)
+  (define (iter a b result)
+    (cond ((= b 0)   result)
+	  ((even? b) (iter (double a) (half b) result))
+	  (else      (iter a (- b 1) (+ a result)))))
+  (iter a b 0))
+(check-mul fast-mul-iter)
+
