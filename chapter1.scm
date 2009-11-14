@@ -487,3 +487,47 @@
 (assert-= 4 (pascal 4 3))
 (assert-= 1 (pascal 4 4))
 
+; Exercise 1.13 TODO
+; Exercise 1.14 TODO
+; Exercise 1.15 TODO
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 1.2.4
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (check-expt expt-fn)
+  (assert-= 1 (expt-fn 0 0))
+  (assert-= 0 (expt-fn 0 1))
+  (assert-= 0 (expt-fn 0 2))
+  (assert-= 0 (expt-fn 0 3))
+
+  (assert-= 1 (expt-fn 1 0))
+  (assert-= 1 (expt-fn 1 1))
+  (assert-= 1 (expt-fn 1 2))
+  (assert-= 1 (expt-fn 1 3))
+
+  (assert-= 1 (expt-fn 2 0))
+  (assert-= 2 (expt-fn 2 1))
+  (assert-= 4 (expt-fn 2 2))
+  (assert-= 8 (expt-fn 2 3)))
+
+(define (expt b n)
+  (if (= n 0)
+      1
+      (* b (expt b (- n 1)))))
+(check-expt expt)
+
+(define (expt-iter b n)
+  (define (iter counter product)
+    (if (= counter 0)
+	product
+	(iter (- counter 1) (* b product))))
+  (iter n 1))
+(check-expt expt-iter)
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+	((even? n) (square (fast-expt b (/ n 2))))
+	(else (* b (fast-expt b (- n 1))))))
+(check-expt fast-expt)
+
