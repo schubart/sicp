@@ -431,3 +431,30 @@
 (assert-= 3 (+ 1 (+ 1 1)))
 
 ; TODO Challenge: More efficient count-change
+
+; Exercise 1.11
+
+(define (check-f f-fn)
+  (assert-=  0 (f-fn 0))
+  (assert-=  1 (f-fn 1))
+  (assert-=  2 (f-fn 2))
+  (assert-=  4 (f-fn 3))
+  (assert-= 11 (f-fn 4))
+  (assert-= 25 (f-fn 5))
+  (assert-= 59 (f-fn 6)))
+
+(define (f n)
+  (if (< n 3)
+      n
+      (+ (* 1 (f (- n 1)))
+	 (* 2 (f (- n 2)))
+	 (* 3 (f (- n 3))))))
+(check-f f)
+
+(define (f-iter n)
+  (define (iter a b c count)
+    (if (= count 0)
+	c
+	(iter (+ a b b c c c) a b (- count 1))))
+  (iter 2 1 0 n))
+(check-f f-iter)
