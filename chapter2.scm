@@ -99,3 +99,32 @@
 (assert-=  2 (numer (make-rat -4 -6)))
 (assert-=  3 (denom (make-rat -4 -6)))
 
+; Exercise 2.2
+
+(define (make-point x y) (cons x y))
+(define (x-point point) (car point))
+(define (y-point point) (cdr point))
+
+(define p34 (make-point 3 4))
+(assert-= 3 (x-point p34))
+(assert-= 4 (x-point p34))
+
+(define (make-segment start end) (cons start end))
+(define (start-segment segment) (car segment))
+(define (end-segment segment) (cdr segment))
+
+(define p57 (make-point 5 7))
+(define s3457 (make-segment p34 p57))
+(assert-= 3 (x-point (start-segment s3457)))
+(assert-= 4 (y-point (start-segment s3457)))
+(assert-= 5 (x-point (end-segment s3457)))
+(assert-= 7 (y-point (end-segment s3457)))
+
+(define (midpoint-segment segment)
+  (let ((start (start-segment segment))
+	(end (end-segment segment)))
+    (make-point (/ (+ (x-point start) (x-point end)) 2.0)
+		(/ (+ (y-point start) (y-point end)) 2.0))))
+(assert-= 4.0 (x-point (midpoint-segment s3457)))
+(assert-= 5.5 (y-point (midpoint-segment s3457)))
+
