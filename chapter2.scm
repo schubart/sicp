@@ -128,3 +128,32 @@
 (assert-= 4.0 (x-point (midpoint-segment s3457)))
 (assert-= 5.5 (y-point (midpoint-segment s3457)))
 
+; Exercise 2.3
+
+(define (area-rect rect)
+  (* (width-rect  rect)
+     (height-rect rect)))
+(define (peri-rect rect)
+  (* 2 (+ (width-rect rect)
+	  (height-rect rect))))
+
+; Represent rectangle as a point (far corner):
+
+(define (make-rect p) p)
+(define (width-rect r)  (x-point r))
+(define (height-rect r) (y-point r))
+
+(assert-= 12 (area-rect (make-rect (make-point 3 4))))
+(assert-= 14 (peri-rect (make-rect (make-point 3 4))))
+
+; Represent rectangle as two points (diagonal corners):
+
+(define (make-rect p1 p2) (cons p1 p2))
+(define (width-rect r) (abs (- (x-point (car r))
+			       (x-point (cdr r)))))
+(define (height-rect r) (abs (- (y-point (car r))
+				(y-point (cdr r)))))
+
+(assert-= 12 (area-rect (make-rect (make-point 1 2) (make-point 4 6))))
+(assert-= 14 (peri-rect (make-rect (make-point 1 2) (make-point 4 6))))
+
