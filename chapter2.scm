@@ -107,7 +107,7 @@
 
 (define p34 (make-point 3 4))
 (assert-= 3 (x-point p34))
-(assert-= 4 (x-point p34))
+(assert-= 4 (y-point p34))
 
 (define (make-segment start end) (cons start end))
 (define (start-segment segment) (car segment))
@@ -156,4 +156,26 @@
 
 (assert-= 12 (area-rect (make-rect (make-point 1 2) (make-point 4 6))))
 (assert-= 14 (peri-rect (make-rect (make-point 1 2) (make-point 4 6))))
+
+; Section 2.1.3
+
+(define (my-cons x y)
+  (lambda (m)
+    (cond ((= m 0) x)
+	  ((= m 1) y)
+	  (else (error "Invalid m:")))))
+(define (my-car p) (p 0))
+(define (my-cdr p) (p 1))
+
+(assert-= 5 (my-car (my-cons 5 7)))
+(assert-= 7 (my-cdr (my-cons 5 7)))
+
+; Exercise 2.4
+
+(define (my-cons x y) (lambda (m) (m x y)))
+(define (my-car z) (z (lambda (x y) x)))
+(define (my-cdr z) (z (lambda (x y) y)))
+
+(assert-= 5 (my-car (my-cons 5 7)))
+(assert-= 7 (my-cdr (my-cons 5 7)))
 
