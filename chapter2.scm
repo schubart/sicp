@@ -179,3 +179,15 @@
 (assert-= 5 (my-car (my-cons 5 7)))
 (assert-= 7 (my-cdr (my-cons 5 7)))
 
+; Exercise 2.5
+
+(define (my-cons a b) (* (expt 2 a)
+			 (expt 3 b)))
+(define (count-factors x b)
+  (cond ((= (remainder x b) 0) (+ 1 (count-factors (/ x b) b)))
+	(else 0)))
+(define (my-car z) (count-factors z 2))
+(define (my-cdr z) (count-factors z 3))
+(assert-= 4 (my-car (my-cons 4 5)))
+(assert-= 5 (my-cdr (my-cons 4 5)))
+
