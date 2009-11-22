@@ -211,8 +211,8 @@
   (define (succ x) (+ x 1))
   ((n succ) 0))
 (assert-= 0 (cn->number zero-cn))
-(assert-= 1 (cn->number (add-1 zero-cn)))
-(assert-= 2 (cn->number (add-1 (add-1 zero-cn))))
+(assert-= 1 (cn->number (add-1-cn zero-cn)))
+(assert-= 2 (cn->number (add-1-cn (add-1-cn zero-cn))))
 
 (define one-cn
   (lambda (f) (lambda (x) (f x))))
