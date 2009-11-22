@@ -11,12 +11,17 @@
 (define (assert-= a b)
   (if (= a b)
       #t
-      (error "Not equal:" a b)))
+      (error "Not =:" a b)))
+
+(define (assert-eq? a b)
+  (if (eq? a b)
+      #t
+      (error "Not eq?:" a b)))
 
 (define (assert-equal-rat a b)
   (if (equal-rat? a b)
       #t
-      (error "Not equal:" a b)))
+      (error "Not equal-rat:" a b)))
 
 ; Section 2.1.1
 
@@ -190,4 +195,37 @@
 (define (my-cdr z) (count-factors z 3))
 (assert-= 4 (my-car (my-cons 4 5)))
 (assert-= 5 (my-cdr (my-cons 4 5)))
+
+; Exercise 2.6
+
+; Church numerals are represented as functions that take two arguments:
+; A unary function f and a value x.
+; The number n is represented by the function that applies f n times to x.
+(define zero-cn
+  (lambda (f) (lambda (x) x)))
+(define (add-1-cn n)
+  (lambda (f) (lambda (x) (f ((n f) x)))))
+
+; A simple way to convert them to numbers is by using f = succ and x = 0:
+(define (cn->number n)
+  (define (succ x) (+ x 1))
+  ((n succ) 0))
+(assert-= 0 (cn->number zero-cn))
+(assert-= 1 (cn->number (add-1 zero-cn)))
+(assert-= 2 (cn->number (add-1 (add-1 zero-cn))))
+
+(define one-cn
+  (lambda (f) (lambda (x) (f x))))
+(assert-= 1 (cn->number one-cn))
+
+(define two-cn
+  (lambda (f) (lambda (x) (f (f x)))))
+(assert-= 2 (cn->number two-cn))
+
+(define (plus-cn n m)
+  (lambda (f) (lambda (x) ((m f) ((n f) x)))))
+(assert-= 0 (cn->number (plus-cn zero-cn zero-cn)))
+(assert-= 1 (cn->number (plus-cn zero-cn one-cn)))
+(assert-= 1 (cn->number (plus-cn one-cn zero-cn)))
+(assert-= 4 (cn->number (plus-cn two-cn two-cn)))
 
