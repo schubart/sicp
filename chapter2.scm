@@ -311,9 +311,18 @@
 (assert-equal? '(1 4 9 16 25 1 3 5 7) (append squares odds))
 (assert-equal? '(1 3 5 7 1 4 9 16 25) (append odds squares))
 
+; Exercise 2.17
+
 (define (last-pair items)
   (if (null? (cdr items))
       items
       (last-pair (cdr items))))
 (assert-equal? '(34) (last-pair '(23 72 149 34)))
 
+; Exercise 2.18
+
+(define (reverse items)
+  (if (null? items)
+      '()
+      (append (reverse (cdr items))
+	      (list (car items)))))
