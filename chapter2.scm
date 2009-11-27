@@ -16,7 +16,12 @@
 (define (assert-eq? a b)
   (if (eq? a b)
       #t
-      (error "Not eq?:" a b)))
+      (error "Not eq:" a b)))
+
+(define (assert-equal? a b)
+  (if (equal? a b)
+      #t
+      (error "Not equal:" a b)))
 
 (define (assert-equal-rat a b)
   (if (equal-rat? a b)
@@ -261,3 +266,48 @@
 				       (make-interval 5 7))))
 (assert-= 9 (upper-bound (add-interval (make-interval 1 2)
 				       (make-interval 5 7))))
+
+; TODO Exercise 2.8 to 2.16
+
+; Section 2.2.1
+
+(assert-equal? '(1 2 3 4) (cons 1 (cons 2 (cons 3 (cons 4 '())))))
+
+(define one-through-four (list 1 2 3 4))
+(assert-= 1 (car one-through-four))
+(assert-equal? '(2 3 4) (cdr one-through-four))
+(assert-= 2 (car (cdr one-through-four)))
+(assert-equal? `(10 1 2 3 4) (cons 10 one-through-four))
+(assert-equal? `(5 1 2 3 4) (cons 5 one-through-four))
+
+(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+
+(define squares '(1 4 9 16 25))
+(assert-= 16 (list-ref squares 3))
+
+(define (length items)
+  (if (null? items)
+      0
+      (+ 1 (length (cdr items)))))
+
+(define odds '(1 3 5 7))
+(assert-= 4 (length odds))
+
+(define (length items)
+  (define (iter a count)
+    (if (null? a)
+	count
+	(iter (cdr a) (+ count 1))))
+  (iter items 0))
+(assert-= 4 (length odds))
+
+(define (append list1 list2)
+  (if (null? list1)
+      list2
+      (cons (car list1) (append (cdr list1) list2))))
+(assert-equal? '(1 4 9 16 25 1 3 5 7) (append squares odds))
+(assert-equal? '(1 3 5 7 1 4 9 16 25) (append odds squares))
+
