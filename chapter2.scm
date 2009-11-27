@@ -326,3 +326,14 @@
       '()
       (append (reverse (cdr items))
 	      (list (car items)))))
+(reverse odds)
+
+; Exercise 2.19
+
+; My implementation of section 1.2.2 already uses lists of denominations.
+; first-denomination:        car
+; except-first-denomination: cdr
+; no-more?:                  null?
+;
+; Order does not matter. TODO: Why?
+
