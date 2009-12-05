@@ -378,3 +378,16 @@
          items))
 (assert-equal? '(10 20 30 40 50) (scale-list '(1 2 3 4 5) 10))
 
+; Exercise 2.21
+
+(define (square-list items)
+  (if (null? items)
+      '()
+      (cons (square (car items))
+            (square-list (cdr items)))))
+(assert-equal? '(1 4 9 16) (square-list '(1 2 3 4)))
+
+(define (square-list items)
+  (map square items))
+(assert-equal? '(1 4 9 16) (square-list '(1 2 3 4)))
+
