@@ -326,7 +326,7 @@
       '()
       (append (reverse (cdr items))
 	      (list (car items)))))
-(reverse odds)
+(assert-equal? '(7 5 3 1) (reverse odds))
 
 ; Exercise 2.19
 
@@ -337,3 +337,19 @@
 ;
 ; Order does not matter. TODO: Why?
 
+; Exercise 2.20
+
+(define (filter predicate items)
+  (cond ((null? items)
+         '())
+        ((predicate (car items))
+         (cons (car items) (filter predicate (cdr items))))
+        (else
+         (filter predicate (cdr items)))))
+(assert-equal? '(1 2 3) (filter (lambda (x) (< x 4)) '(1 2 3 4 5 6)))
+
+(define (same-parity first . rest)
+  (filter (lambda (x) (eq? (even? x) (even? first)))
+          (cons first rest)))
+(assert-equal? '(1 3 5 7) (same-parity 1 2 3 4 5 6 7))
+(assert-equal? '(2 4 6) (same-parity 2 3 4 5 6 7))
