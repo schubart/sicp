@@ -416,3 +416,14 @@
 ; though, the first (answer) is a list, the second (square ...) is an item,
 ; so this function does not build a list as expected.
 
+; Exercise 2.23
+
+; Since the return value can be something arbitrary, might as well use map.
+(define (my-for-each proc items) (map proc items))
+(assert-equal?
+ '(#!unspecific #!unspecific #!unspecific)
+ (my-for-each (lambda (x)
+                (newline)
+                (display x))
+              '(57 321 88)))
+
