@@ -391,3 +391,28 @@
   (map square items))
 (assert-equal? '(1 4 9 16) (square-list '(1 2 3 4)))
 
+; Exercise 2.22
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons (square (car things))
+                    answer))))
+  (iter items '()))
+(assert-equal? '(16 9 4 1) (square-list '(1 2 3 4)))
+; This function squares things left-to-right and builds answer right-to-left.
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons answer
+                    (square (car things)))))))
+; This function tries to build answer left-to-right, but in order to build a
+; list, the first argument to cons should be an item, the second a list. Here,
+; though, the first (answer) is a list, the second (square ...) is an item,
+; so this function does not build a list as expected.
+
