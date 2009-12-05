@@ -339,17 +339,42 @@
 
 ; Exercise 2.20
 
-(define (filter predicate items)
+(define (myfilter predicate items)
   (cond ((null? items)
          '())
         ((predicate (car items))
-         (cons (car items) (filter predicate (cdr items))))
+         (cons (car items) (myfilter predicate (cdr items))))
         (else
-         (filter predicate (cdr items)))))
-(assert-equal? '(1 2 3) (filter (lambda (x) (< x 4)) '(1 2 3 4 5 6)))
+         (myfilter predicate (cdr items)))))
+(assert-equal? '(1 2 3) (myfilter (lambda (x) (< x 4)) '(1 2 3 4 5 6)))
 
 (define (same-parity first . rest)
-  (filter (lambda (x) (eq? (even? x) (even? first)))
-          (cons first rest)))
+  (myfilter (lambda (x) (eq? (even? x) (even? first)))
+            (cons first rest)))
 (assert-equal? '(1 3 5 7) (same-parity 1 2 3 4 5 6 7))
 (assert-equal? '(2 4 6) (same-parity 2 3 4 5 6 7))
+
+; Section 2.2.1 cont. (Mapping over lists)
+
+(define (scale-list items factor)
+  (if (null? items)
+      '()
+      (cons (* (car items) factor)
+            (scale-list (cdr items) factor))))
+(assert-equal? '(10 20 30 40 50) (scale-list '(1 2 3 4 5) 10))
+
+(define (mymap proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (mymap proc (cdr items)))))
+(assert-equal? '(10 2.5 11.6 17) (mymap abs '(-10 2.5 -11.6 17)))
+(assert-equal? '(1 4 9 16)
+               (mymap (lambda (x) (* x x))
+                      '(1 2 3 4)))
+
+(define (scale-list items factor)
+  (mymap (lambda (x) (* x factor))
+         items))
+(assert-equal? '(10 20 30 40 50) (scale-list '(1 2 3 4 5) 10))
+
