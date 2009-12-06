@@ -427,3 +427,18 @@
                 (display x))
               '(57 321 88)))
 
+; Section 2.2.2
+
+(define x '((1 2) 3 4))
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+(assert-= 3 (length x))
+(assert-= 4 (count-leaves x))
+
+(assert-equal? '(((1 2) 3 4) ((1 2) 3 4)) (list x x))
+(assert-= 2 (length (list x x)))
+(assert-= 8 (count-leaves (list x x)))
+
