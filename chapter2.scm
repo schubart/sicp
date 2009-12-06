@@ -442,3 +442,17 @@
 (assert-= 2 (length (list x x)))
 (assert-= 8 (count-leaves (list x x)))
 
+; TODO Exercise 2.24
+
+; Exercise 2.25
+
+(define x '(1 3 (5 7) 9))
+(assert-= 7 (car (cdr (car (cdr (cdr x))))))
+
+(define x '((7)))
+(assert-= 7 (car (car x)))
+
+(define x '(1 (2 (3 (4 (5 (6 7)))))))
+(assert-= 7
+          (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr x)))))))))))))
+
