@@ -471,7 +471,7 @@
 ; Exercise 2.27
 
 (define (deep-reverse items)
-  (if (or (not (list? items))
+  (if (or (not (pair? items))
           (null? items))
       items
       (append (deep-reverse (cdr items))
