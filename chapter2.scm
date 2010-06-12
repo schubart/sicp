@@ -486,3 +486,14 @@
 (define x (list (list 1 2) (list 3 (list 4 5))))
 (assert-equal? '(((5 4) 3) (2 1)) (deep-reverse x))
 
+; Exercise 2.28
+
+(define (fringe tree)
+  (cond ((null? tree) '())
+        ((pair? tree) (append (fringe (car tree)) (fringe (cdr tree))))
+        (else         (list tree))))
+
+(define x (list (list 1 2) (list 3 4)))
+(assert-equal? '(1 2 3 4) (fringe x))
+(assert-equal? '(1 2 3 4 1 2 3 4) (fringe (list x x)))
+
