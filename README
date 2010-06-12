@@ -1,0 +1,7 @@
+How to run it from emacs:
+M-x load-library xscheme
+run-scheme
+M-o
+
+More:
+http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-user/GNU-Emacs-Interface.html#GNU-Emacs-Interface

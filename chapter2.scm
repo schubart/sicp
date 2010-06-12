@@ -467,3 +467,22 @@
                (cons x y))
 (assert-equal? '((1 2 3) (4 5 6))
                (list x y))
+
+; Exercise 2.27
+
+(define (deep-reverse items)
+  (if (or (not (list? items))
+          (null? items))
+      items
+      (append (deep-reverse (cdr items))
+	      (list (deep-reverse (car items))))))
+
+(define x (list (list 1 2) (list 3 4)))
+(assert-equal? '((1 2) (3 4)) x)
+(assert-equal? '((3 4) (1 2)) (reverse x))
+(assert-equal? '((4 3) (2 1)) (deep-reverse x))
+
+; Try even more nesting.
+(define x (list (list 1 2) (list 3 (list 4 5))))
+(assert-equal? '(((5 4) 3) (2 1)) (deep-reverse x))
+
