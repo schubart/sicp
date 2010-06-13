@@ -580,3 +580,26 @@
 (define (branch-structure branch)      (cdr branch))
 
 (test-mobile)
+
+; Mapping over trees.
+
+(define (scale-tree tree factor)
+  (cond ((null? tree)       '())
+        ((not (pair? tree)) (* tree factor))
+        (else               (cons (scale-tree (car tree) factor)
+                                  (scale-tree (cdr tree) factor)))))
+
+(assert-equal? '(10 (20 (30 40) 50) (60 70))
+               (scale-tree '(1 (2 (3 4) 5) (6 7))
+                           10))
+
+(define (scale-tree tree factor)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (scale-tree sub-tree factor)
+             (* sub-tree factor)))
+       tree))
+
+(assert-equal? '(10 (20 (30 40) 50) (60 70))
+               (scale-tree '(1 (2 (3 4) 5) (6 7))
+                           10))
