@@ -604,3 +604,17 @@
 
 (test-scale-tree)
 
+; Even better: Why not have a general map function for trees?
+
+(define (map-tree tree f)
+  (cond ((null? tree)        '())
+        ((not (pair? tree))  (f tree))
+        (else                (cons (map-tree (car tree) f)
+                                   (map-tree (cdr tree) f)))))
+
+(define (scale-tree tree factor)
+  (map-tree tree
+            (lambda (element) (* element factor))))
+
+(test-scale-tree)
+
