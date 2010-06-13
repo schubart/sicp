@@ -637,5 +637,15 @@
 
 ; Exercise 2.31
 
-; Already done above. The aruments to map-tree are in opposite order, though.
+; Already done above. The arguments to map-tree are in opposite order, though.
 
+; Exercise 2.32
+
+(define (subsets s)
+  (if (null? s)
+      '(())
+      (let ((rest (subsets (cdr s))))
+        (append rest (map (lambda (x) (cons (car s) x)) rest))
+        )))
+(assert-equal? '(() (3) (2) (2 3) (1) (1 3) (1 2) (1 2 3))
+               (subsets '(1 2 3)))
