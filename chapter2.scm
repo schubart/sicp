@@ -618,3 +618,20 @@
 
 (test-scale-tree)
 
+; Exercise 2.30
+
+(define (square-tree tree)
+  (cond ((null? tree)       '())
+        ((not (pair? tree)) (* tree tree))
+        (else               (cons (square-tree (car tree))
+                                  (square-tree (cdr tree))))))
+(define (test-square-tree)
+  (assert-equal? '(1 (4 (9 16) 25) (36 49))
+                 (square-tree '(1 (2 (3 4) 5) (6 7)))))
+(test-square-tree)
+
+(define (square-tree tree)
+  (map-tree tree
+            (lambda (element) (* element element))))
+(test-square-tree)
+
