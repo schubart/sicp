@@ -589,9 +589,11 @@
         (else               (cons (scale-tree (car tree) factor)
                                   (scale-tree (cdr tree) factor)))))
 
-(assert-equal? '(10 (20 (30 40) 50) (60 70))
-               (scale-tree '(1 (2 (3 4) 5) (6 7))
-                           10))
+(define (test-scale-tree)
+  (assert-equal? '(10 (20 (30 40) 50) (60 70))
+                 (scale-tree '(1 (2 (3 4) 5) (6 7))
+                             10)))
+(test-scale-tree)
 
 (define (scale-tree tree factor)
   (map (lambda (sub-tree)
@@ -600,6 +602,5 @@
              (* sub-tree factor)))
        tree))
 
-(assert-equal? '(10 (20 (30 40) 50) (60 70))
-               (scale-tree '(1 (2 (3 4) 5) (6 7))
-                           10))
+(test-scale-tree)
+
