@@ -497,3 +497,86 @@
 (assert-equal? '(1 2 3 4) (fringe x))
 (assert-equal? '(1 2 3 4 1 2 3 4) (fringe (list x x)))
 
+; Exercise 2.29
+
+(define (make-mobile left right)       (list left right))
+(define (make-branch length structure) (list length structure))
+
+; a) Selectors
+(define (mobile? structure)       (pair? structure))
+(define (left-branch mobile)      (car mobile))
+(define (right-branch mobile)     (car (cdr mobile)))
+(define (branch-length branch)    (car branch))
+(define (branch-structure branch) (car (cdr branch)))
+
+; b) total-weight
+(define (total-weight structure)
+  (if (mobile? structure)
+      (+ (total-weight (branch-structure (left-branch  structure)))
+         (total-weight (branch-structure (right-branch structure))))
+      structure))
+
+; c) balanced?
+(define (balanced? structure)
+
+  ; Helper for calculating torque of a branch
+  (define (torque branch)
+    (* (branch-length branch)
+       (total-weight (branch-structure branch))))
+
+  (cond ((mobile? structure)
+         (let ((left  (left-branch  structure))
+               (right (right-branch structure)))
+           (and (= (torque left) (torque right))
+                (balanced? (branch-structure left))
+                (balanced? (branch-structure right)))))
+        (else #t)))
+
+(define (test-mobile)
+  ; Simple mobiles:
+
+  ; Balanced, weight 5.
+  (define b5 (make-mobile (make-branch 1 4) (make-branch 4 1)))
+  (assert-equal? 5 (total-weight b5))
+  (assert (balanced? b5))
+
+  ; Imbalanced, weight 5.
+  (define i5 (make-mobile (make-branch 2 4) (make-branch 4 1)))
+  (assert-equal? 5 (total-weight i5))
+  (assert (not (balanced? i5)))
+
+  ; Compound mobiles:
+
+  ; Balanced, weight 10:
+  (define b10 (make-mobile (make-branch 7 b5) (make-branch 7 b5)))
+  (assert-equal? 10 (total-weight b10))
+  (assert (balanced? b10))
+
+  ; Imbalanced, because torques different.
+  (define i10t (make-mobile (make-branch 7 b5) (make-branch 8 b5)))
+  (assert-equal? 10 (total-weight i10t))
+  (assert (not (balanced? i10t)))
+
+  ; Imbalanced, because left branch imbalanced.
+  (define i10l (make-mobile (make-branch 7 i5) (make-branch 7 b5)))
+  (assert-equal? 10 (total-weight i10l))
+  (assert (not (balanced? i10l)))
+
+  ; Imbalanced, because right branch imbalanced.
+  (define i10r (make-mobile (make-branch 7 b5) (make-branch 7 i5)))
+  (assert-equal? 10 (total-weight i10r))
+  (assert (not (balanced? i10r))))
+
+(test-mobile)
+
+; d) New representation and new selectors.
+; Only constructors and accessors need to change, not the program.
+(define (make-mobile left right)       (cons left right))
+(define (make-branch length structure) (cons length structure))
+(define (mobile? structure)            (pair? structure))
+(define (left-branch mobile)           (car mobile))
+(define (right-branch mobile)          (cdr mobile))
+(define (branch-length branch)         (car branch))
+(define (branch-structure branch)      (cdr branch))
+
+(test-mobile)
