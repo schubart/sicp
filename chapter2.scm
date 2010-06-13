@@ -635,3 +635,7 @@
             (lambda (element) (* element element))))
 (test-square-tree)
 
+; Exercise 2.31
+
+; Already done above. The aruments to map-tree are in opposite order, though.
+
